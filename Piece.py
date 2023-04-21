@@ -66,3 +66,43 @@ class Piece:
         piece = Piece(color, piece_type, position)
 
         return piece
+    def get_pawn_moves(self, board):
+        (row, col) = self.position
+        possible_moves = []
+        take_moves = []
+        final_moves = []
+
+        # Find all the possible moves and take moves for black piece
+        if self.color == PieceColor.Black:
+            possible_moves = [(row, col + 1)] # can move one column up
+            take_moves = [(row - 1, col + 1), (row + 1, col + 1)] # can take pieces diagonally
+            if self.position[1] == 1:
+                possible_moves.append((row, col + 2)) # can move two columns up, if it's the pawn's first move
+
+        # Find all the possible moves and take moves for white piece
+        else:
+            possible_moves = [(row, col - 1)]
+            take_moves = [(row + 1, col - 1), (row - 1, col - 1)]
+            if self.position[1] == 6:
+                possible_moves.append((row, col - 2))
+
+        # Filter the take moves so that a piece isn't able to take self colored piece
+        for move in take_moves:
+            (move_row, move_col) = move
+            if move_row not in range(0, 8) or move_col not in range(0, 8):
+                continue
+            square = board[move_row][move_col]
+            if square.containsChessPiece() and square.chessPiece.color != self.color:
+                final_moves.append(move)
+
+        # Filter the possible moves so that a piece may not move when blocked
+        for move in possible_moves:
+            (move_row, move_row) = move
+            if move_row not in range(0, 8) or col not in range(0, 8):
+                continue
+            square = board[move_row][move_col]
+            if square.containsChessPiece:
+                continue
+            else:
+                final_moves.append(move)
+        return final_moves
