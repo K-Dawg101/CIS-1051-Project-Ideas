@@ -1,6 +1,6 @@
 class Square:
     def __init__(self, row: int, col: int, rectangle=None, chessPiece=None):
-        self.containsChessPiece = chessPiece is not None
+        self.hasPiece = chessPiece is not None
         self.chessPiece = chessPiece
         self.col = col
         self.row = row
@@ -11,7 +11,7 @@ class Square:
         if not chessPiece:
             return
         self.chessPiece = chessPiece
-        self.containsChessPiece = True
+        self.hasPiece = True
 
     def contains_piece(self):
         return self.chessPiece is not None

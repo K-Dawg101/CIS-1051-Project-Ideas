@@ -19,7 +19,7 @@ class PieceColor(Enum):
 
 class Piece:
 
-    def __init__(self, color: PieceColor, piece_type: PieceType, position: Tuple['int'],  rect=None) -> None:
+    def __init__(self, color: PieceColor, piece_type: PieceType, position: Tuple['int'], rect=None) -> None:
         self.color = color
         self.piece_type = piece_type
         self.short_annotation = "w" if self.color == PieceColor.White else "b"
@@ -66,43 +66,108 @@ class Piece:
         piece = Piece(color, piece_type, position)
 
         return piece
-    def get_pawn_moves(self, board):
+    def get_moves(self, board):
+        moves = []
+        match self.piece_type:
+            case PieceType.Pawn:
+                moves = self.pawn_moves(board)
+            case PieceType.King:
+                moves = self.king_moves(board)
+            case PieceType.Rook:
+                moves = self.rook_moves(board)
+
+
+        return moves
+
+
+    def pawn_moves(self, board):
         (row, col) = self.position
-        possible_moves = []
+        moves = []
         take_moves = []
         final_moves = []
 
         # Find all the possible moves and take moves for black piece
         if self.color == PieceColor.Black:
-            possible_moves = [(row, col + 1)] # can move one column up
-            take_moves = [(row - 1, col + 1), (row + 1, col + 1)] # can take pieces diagonally
+            moves = [(row, col + 1)]  # can move one column up
+            take_moves = [(row - 1, col + 1), (row + 1, col + 1)]  # can take pieces diagonally
             if self.position[1] == 1:
-                possible_moves.append((row, col + 2)) # can move two columns up, if it's the pawn's first move
+                moves.append((row, col + 2))  # can move two columns up, if it's the pawn's first move
 
         # Find all the possible moves and take moves for white piece
         else:
-            possible_moves = [(row, col - 1)]
+            moves = [(row, col - 1)]
             take_moves = [(row + 1, col - 1), (row - 1, col - 1)]
             if self.position[1] == 6:
-                possible_moves.append((row, col - 2))
+                moves.append((row, col - 2))
 
         # Filter the take moves so that a piece isn't able to take self colored piece
         for move in take_moves:
-            (move_row, move_col) = move
-            if move_row not in range(0, 8) or move_col not in range(0, 8):
+            (row, col) = move
+            if row not in range(0, 8) or col not in range(0, 8):
                 continue
-            square = board[move_row][move_col]
-            if square.containsChessPiece() and square.chessPiece.color != self.color:
+            square = board[row][col]
+            if square.contains_piece() and square.chessPiece.color != self.color:
                 final_moves.append(move)
 
-        # Filter the possible moves so that a piece may not move when blocked
-        for move in possible_moves:
-            (move_row, move_row) = move
-            if move_row not in range(0, 8) or col not in range(0, 8):
+        # Filter out blocked moves
+        for move in moves:
+            (row, col) = move
+            if row not in range(0, 8) or col not in range(0, 8):
                 continue
-            square = board[move_row][move_col]
-            if square.containsChessPiece:
+            square = board[row][col]
+            if square.contains_piece():
                 continue
             else:
                 final_moves.append(move)
+        return final_moves
+
+    def king_moves(self, board):
+        (row, col) = self.position
+
+        moves = [
+            (row + 1, col + 1), (row + 1, col), (row + 1, col - 1),
+            (row, col + 1), (row, col - 1),
+            (row - 1, col - 1), (row - 1, col), (row - 1, col + 1)
+        ]
+        final_moves = []
+
+        # Filter out blocked moves
+        for move in moves:
+            (row, col) = move
+            if row not in range(0, 8) or col not in range(0, 8):
+                continue
+            square = board[row][col]
+            if square.contains_piece() and square.chessPiece.color == self.color:
+                continue
+            else:
+                final_moves.append(move)
+
+        return final_moves
+
+    def rook_moves(self, board):
+        axes = [
+            (1, 0),
+            (-1, 0),
+            (0, 1),
+            (0, -1)
+        ]
+        final_moves = []
+        (row, col) = self.position
+
+        for ax in axes:
+            new_row = row + ax[0]
+            new_col = col + ax[1]
+            while new_row in range(0, 8) and new_col in range(0, 8):
+                square = board[new_row][new_col]
+                if square.contains_piece():
+                    if square.chessPiece.color == self.color:
+                        break
+                    else:
+                        final_moves.append((new_row, new_col))
+                        break
+                else:
+                    final_moves.append((new_row, new_col))
+                new_row += ax[0]
+                new_col += ax[1]
+
         return final_moves
