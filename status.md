@@ -7,7 +7,7 @@
 
 #### Your section leader's name
 
-- Kidus Adamte
+- Nathan Adiam
 
 #### Project title
 
