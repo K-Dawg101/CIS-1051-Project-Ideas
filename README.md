@@ -14,4 +14,4 @@
 - Implement legal movement of pieces on board
 - Implement pieces to legally capture and be captured
 
-[Project Proposal]([https://link-url-here.org](https://github.com/K-Dawg101/CIS-1051-Project-Ideas/blob/main/proposal.md)
+[Project Proposal](https://github.com/K-Dawg101/CIS-1051-Project-Ideas/blob/main/proposal.md)
