@@ -22,4 +22,6 @@ python3 -m pip install -U pygame --user
 - Natanim Abebe
 - Nathan Adiam
 
+[Reference](https://www.thepythoncode.com/article/make-a-chess-game-using-pygame-in-python)
+
 [Project Proposal](https://github.com/K-Dawg101/CIS-1051-Project-Ideas/blob/main/proposal.md)
