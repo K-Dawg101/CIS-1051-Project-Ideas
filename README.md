@@ -1,8 +1,17 @@
-# Preposal
-## Project Idea
-We are thinking about building a chess game. It will be a functional game that can be played between two players written in python using pygame module.
+# Chess Game 
+
+## Project Overview
+- A python chess game that can be played by two human players.
+
 ## Group Members
-We plan on working as group of three
 - Kidus Adamte
 - Natanim Abebe
 - Nathan Adiam
+
+## Project Goals 
+- Implement a chess board with pieces placed in the right places
+- Allow user interaction to make pieces move
+- Implement legal movement of pieces on board
+- Implement pieces to legally capture and be captured
+
+[Project Proposal]([https://link-url-here.org](https://github.com/K-Dawg101/CIS-1051-Project-Ideas/blob/main/proposal.md))
