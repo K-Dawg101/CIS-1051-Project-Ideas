@@ -77,6 +77,10 @@ class Piece:
                 moves = self.rook_moves(board)
             case PieceType.Bishop:
                 moves = self.bishop_moves(board)
+            case PieceType.Knight:
+                moves = self.knight_moves(board)
+            case PieceType.Queen:
+                moves = self.queen_moves(board)
 
 
         return moves
@@ -201,3 +205,35 @@ class Piece:
                 new_col += ax[1]
 
         return final_moves
+    
+    def knight_moves(self, board):
+        (row, col) = self.position
+        moves = [
+            # row 2
+            (row + 2, col + 1), (row + 2, col - 1),
+            (row - 2, col + 1), (row - 2, col - 1),
+
+            # column 2
+            (row + 1, col - 2), (row - 1, col - 2),
+            (row + 1, col + 2), (row - 1, col + 2),
+        ]
+        final_moves = []
+        for move in moves:
+            (row, col) = move
+
+            if row not in range(0, 8) or col not in range(0, 8):
+                continue
+
+            square = board[row][col]
+            if square.contains_piece():
+                if square.chessPiece.color == self.color:
+                    continue
+                else:
+                    final_moves.append(move)
+            else:
+                final_moves.append(move)
+
+        return final_moves
+    
+    def queen_moves(self, board):
+        return self.bishop_moves(board) + self.rook_moves(board)
